@@ -3,6 +3,7 @@
 import React, { useState } from "react"
 import { useRouter } from "next/navigation"
 import { signIn } from "next-auth/react"
+import Image from "next/image"
 import { Mail, Lock, ArrowRight, ShieldCheck, ArrowLeft, Loader2, KeyRound, Eye, EyeOff } from "lucide-react"
 
 export default function LoginPage() {
@@ -191,8 +192,8 @@ export default function LoginPage() {
         
         {/* Logo / Title block */}
         <div className="text-center mb-8 flex flex-col items-center">
-          <div className="w-14 h-14 bg-white rounded-2xl shadow-lg shadow-purple-500/10 flex items-center justify-center mb-5 border border-gray-50 p-1">
-             <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" />
+          <div className="w-14 h-14 bg-white rounded-2xl shadow-lg shadow-purple-500/10 flex items-center justify-center mb-5 border border-gray-50 p-1 relative overflow-hidden">
+             <Image src="/logo.png" alt="Logo" fill className="object-contain p-1" />
           </div>
           <h1 className="font-serif italic text-3xl font-black tracking-tight text-[#1A1A2E] mb-1.5">
             inktoinsight
