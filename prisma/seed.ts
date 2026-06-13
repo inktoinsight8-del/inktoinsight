@@ -41,6 +41,47 @@ async function main() {
     },
   })
 
+  // 4. Create First Post
+  const postCount = await prisma.post.count()
+  if (postCount === 0) {
+    const techCategory = await prisma.category.findUnique({
+      where: { name: 'Tech & AI' }
+    })
+    
+    if (techCategory) {
+      await prisma.post.create({
+        data: {
+          title: 'Content Overview: What to Expect from Ink&Insight',
+          slug: 'content-overview',
+          excerpt: 'An introductory roadmap to what we publish at Ink&Insight—exploring the intersection of quantitative finance, AI, and career growth.',
+          content: `
+            <h2>Welcome to Ink&Insight!</h2>
+            <p>This space is dedicated to exploring the intersection of modern finance, market mechanics, and cutting-edge artificial intelligence. Here is a high-level overview of the content we will publish:</p>
+            <ul>
+              <li><strong>Quantitative Trading & Finance</strong>: Coding trading strategies, backtesting models, and analyzing market microstructure.</li>
+              <li><strong>Tech & Artificial Intelligence</strong>: Leveraging LLMs, training custom ML pipelines, and integrating deep learning systems.</li>
+              <li><strong>Career & Growth</strong>: Professional advice on breaking into quant, software engineering, and career scaling.</li>
+            </ul>
+            <p>Stay tuned for our first technical deep dives!</p>
+          `,
+          coverImage: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1200&q=80',
+          categoryId: techCategory.id,
+          status: 'PUBLISHED',
+          readTime: '2 min read',
+          author: 'Sanju',
+          tags: {
+            create: [
+              { name: 'Introduction' },
+              { name: 'Overview' },
+              { name: 'Blog' }
+            ]
+          }
+        }
+      })
+      console.log('First seed post created!')
+    }
+  }
+
   console.log('Database seeded!')
 }
 

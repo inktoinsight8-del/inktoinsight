@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { LogOut, LayoutDashboard, FileText, Settings, PlusCircle } from 'lucide-react'
+import { LogOut, LayoutDashboard, FileText, Settings, PlusCircle, Folder } from 'lucide-react'
 import { auth, signOut } from '@/auth'
 import { redirect } from 'next/navigation'
 
@@ -34,9 +34,13 @@ export default async function AdminLayout({
               <FileText size={18} className="text-gray-400" />
               All Posts
             </Link>
-            <Link href="/admin/posts/new" className="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-[#4F6DF5]/10 text-[#4F6DF5] transition-all text-sm font-semibold">
-              <PlusCircle size={18} />
+            <Link href="/admin/posts/new" className="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-[#2A2D3A] transition-all text-sm font-semibold text-gray-700 dark:text-gray-300">
+              <PlusCircle size={18} className="text-gray-400" />
               New Post
+            </Link>
+            <Link href="/admin/categories" className="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-[#2A2D3A] transition-all text-sm font-semibold text-gray-700 dark:text-gray-300">
+              <Folder size={18} className="text-gray-400" />
+              Categories
             </Link>
             <Link href="/admin/settings" className="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-[#2A2D3A] transition-all text-sm font-semibold text-gray-700 dark:text-gray-300">
               <Settings size={18} className="text-gray-400" />
