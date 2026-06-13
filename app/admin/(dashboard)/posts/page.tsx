@@ -3,6 +3,8 @@ import Link from "next/link"
 import { format } from "date-fns"
 import { Edit, Trash2 } from "lucide-react"
 
+import DeletePostButton from "@/components/DeletePostButton"
+
 export default async function PostsPage() {
   const posts = await prisma.post.findMany({
     orderBy: { createdAt: 'desc' },
@@ -57,9 +59,7 @@ export default async function PostsPage() {
                       <Link href={`/admin/posts/${post.id}/edit`} className="text-gray-400 hover:text-[#4F6DF5] transition-colors">
                         <Edit size={18} />
                       </Link>
-                      <button className="text-gray-400 hover:text-red-500 transition-colors">
-                        <Trash2 size={18} />
-                      </button>
+                      <DeletePostButton postId={post.id} title={post.title} />
                     </div>
                   </td>
                 </tr>

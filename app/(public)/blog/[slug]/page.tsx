@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 import { format } from "date-fns"
 import ReadingProgress from "@/components/ReadingProgress"
 import PostActions from "@/components/PostActions"
+import Image from "next/image"
 
 export default async function PostDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
@@ -44,6 +45,16 @@ export default async function PostDetailPage({ params }: { params: Promise<{ slu
         </header>
 
         <div className="w-full aspect-[21/9] bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 rounded-2xl mb-12 relative overflow-hidden">
+          {post.coverImage && (
+            <Image
+              src={post.coverImage}
+              alt={post.title}
+              fill
+              sizes="(max-width: 1200px) 100vw, 1200px"
+              className="object-cover"
+              priority
+            />
+          )}
         </div>
 
         <div 

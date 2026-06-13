@@ -8,6 +8,14 @@ import { Color } from '@tiptap/extension-color'
 import { FontFamily } from '@tiptap/extension-font-family'
 import { TextAlign } from '@tiptap/extension-text-align'
 import { Image } from '@tiptap/extension-image'
+import Underline from '@tiptap/extension-underline'
+import { 
+  Bold, Italic, Underline as UnderlineIcon, 
+  AlignLeft, AlignCenter, AlignRight, AlignJustify,
+  Heading2, Heading3, List, ListOrdered, Quote, Image as ImageIcon,
+  Undo, Redo 
+} from 'lucide-react'
+import { CldUploadWidget } from 'next-cloudinary'
 
 export default function TiptapEditor({ content, onChange }: { content: string, onChange: (content: string) => void }) {
   const editor = useEditor({
@@ -17,6 +25,7 @@ export default function TiptapEditor({ content, onChange }: { content: string, o
       Color,
       FontFamily,
       Image,
+      Underline,
       TextAlign.configure({
         types: ['heading', 'paragraph'],
       }),
@@ -30,7 +39,7 @@ export default function TiptapEditor({ content, onChange }: { content: string, o
     },
     editorProps: {
       attributes: {
-        class: 'prose dark:prose-invert max-w-none focus:outline-none min-h-[400px] p-6 bg-white dark:bg-[#0F1117] rounded-b-lg',
+        class: 'prose dark:prose-invert max-w-none focus:outline-none min-h-[1056px] w-[816px] mx-auto p-12 bg-white dark:bg-[#0F1117] shadow-lg border border-gray-200 dark:border-[#2A2D3A]',
       },
     },
   })
@@ -39,21 +48,31 @@ export default function TiptapEditor({ content, onChange }: { content: string, o
     return null
   }
 
-  const addImage = () => {
-    const url = window.prompt('URL')
-    if (url) {
-      editor.chain().focus().setImage({ src: url }).run()
-    }
-  }
+  const ToolbarButton = ({ onClick, isActive, icon: Icon, disabled = false }: any) => (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className={`p-2 rounded-md transition-colors flex items-center justify-center ${disabled ? 'opacity-30 cursor-not-allowed' : isActive ? 'bg-[#EAF1FB] text-[#0B57D0] dark:bg-[#4F6DF5]/20 dark:text-[#4F6DF5]' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#2A2D3A]'}`}
+    >
+      <Icon size={18} />
+    </button>
+  )
+
+  const Divider = () => <div className="w-px h-6 bg-gray-300 dark:bg-gray-700 mx-1 self-center"></div>
 
   return (
-    <div className="w-full border border-gray-200 dark:border-[#2A2D3A] rounded-lg overflow-hidden shadow-sm">
-      <div className="flex flex-wrap gap-2 p-3 bg-gray-50 dark:bg-[#1A1D27] border-b border-gray-200 dark:border-[#2A2D3A] sticky top-0 z-10">
+    <div className="w-full flex flex-col bg-gray-100 dark:bg-[#1A1D27] rounded-xl border border-gray-200 dark:border-[#2A2D3A] overflow-hidden shadow-inner">
+      <div className="flex flex-wrap items-center gap-1 p-2 bg-[#F9FBFD] dark:bg-[#0F1117] border-b border-gray-200 dark:border-[#2A2D3A] sticky top-0 z-10 shadow-sm">
         
-        {/* Font Family */}
+        <ToolbarButton onClick={() => editor.chain().focus().undo().run()} disabled={!editor.can().undo()} icon={Undo} />
+        <ToolbarButton onClick={() => editor.chain().focus().redo().run()} disabled={!editor.can().redo()} icon={Redo} />
+        
+        <Divider />
+
         <select
           onChange={(event) => editor.chain().focus().setFontFamily(event.target.value).run()}
-          className="px-2 py-1 text-sm border rounded bg-white dark:bg-[#0F1117] dark:border-[#2A2D3A]"
+          className="px-2 py-1.5 text-sm border-transparent hover:bg-gray-100 focus:bg-white rounded-md bg-transparent dark:text-white dark:hover:bg-[#2A2D3A] cursor-pointer outline-none transition-colors"
         >
           <option value="Inter">Inter</option>
           <option value="Comic Sans MS, Comic Sans">Comic Sans</option>
@@ -61,75 +80,63 @@ export default function TiptapEditor({ content, onChange }: { content: string, o
           <option value="monospace">Monospace</option>
         </select>
 
-        {/* Text Color */}
-        <input
-          type="color"
-          onInput={(event: any) => editor.chain().focus().setColor(event.target.value).run()}
-          value={editor.getAttributes('textStyle').color || '#000000'}
-          className="h-8 w-8 p-0 border-0 rounded cursor-pointer"
-        />
+        <Divider />
 
-        <div className="w-px h-6 bg-gray-300 dark:bg-gray-700 mx-1 self-center"></div>
-
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleBold().run()}
-          className={`px-3 py-1.5 text-sm font-bold rounded transition-colors ${editor.isActive('bold') ? 'bg-[#4F6DF5] text-white' : 'bg-white dark:bg-[#0F1117] hover:bg-gray-200 dark:hover:bg-[#2A2D3A]'}`}
-        >
-          B
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={`px-3 py-1.5 text-sm italic rounded transition-colors ${editor.isActive('italic') ? 'bg-[#4F6DF5] text-white' : 'bg-white dark:bg-[#0F1117] hover:bg-gray-200 dark:hover:bg-[#2A2D3A]'}`}
-        >
-          I
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-          className={`px-3 py-1.5 text-sm font-bold rounded transition-colors ${editor.isActive('heading', { level: 2 }) ? 'bg-[#4F6DF5] text-white' : 'bg-white dark:bg-[#0F1117] hover:bg-gray-200 dark:hover:bg-[#2A2D3A]'}`}
-        >
-          H2
-        </button>
-
-        <div className="w-px h-6 bg-gray-300 dark:bg-gray-700 mx-1 self-center"></div>
-
-        {/* Alignment */}
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().setTextAlign('left').run()}
-          className={`px-3 py-1.5 text-sm rounded transition-colors ${editor.isActive({ textAlign: 'left' }) ? 'bg-[#4F6DF5] text-white' : 'bg-white dark:bg-[#0F1117] hover:bg-gray-200 dark:hover:bg-[#2A2D3A]'}`}
-        >
-          Left
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().setTextAlign('center').run()}
-          className={`px-3 py-1.5 text-sm rounded transition-colors ${editor.isActive({ textAlign: 'center' }) ? 'bg-[#4F6DF5] text-white' : 'bg-white dark:bg-[#0F1117] hover:bg-gray-200 dark:hover:bg-[#2A2D3A]'}`}
-        >
-          Center
-        </button>
-
-        <div className="w-px h-6 bg-gray-300 dark:bg-gray-700 mx-1 self-center"></div>
-
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          className={`px-3 py-1.5 text-sm rounded transition-colors ${editor.isActive('blockquote') ? 'bg-[#4F6DF5] text-white' : 'bg-white dark:bg-[#0F1117] hover:bg-gray-200 dark:hover:bg-[#2A2D3A]'}`}
-        >
-          Quote
-        </button>
+        <ToolbarButton onClick={() => editor.chain().focus().toggleBold().run()} isActive={editor.isActive('bold')} icon={Bold} />
+        <ToolbarButton onClick={() => editor.chain().focus().toggleItalic().run()} isActive={editor.isActive('italic')} icon={Italic} />
+        <ToolbarButton onClick={() => editor.chain().focus().toggleUnderline().run()} isActive={editor.isActive('underline')} icon={UnderlineIcon} />
         
-        <button
-          type="button"
-          onClick={addImage}
-          className="px-3 py-1.5 text-sm rounded transition-colors bg-white dark:bg-[#0F1117] hover:bg-gray-200 dark:hover:bg-[#2A2D3A]"
+        <div className="flex items-center mx-1 relative overflow-hidden rounded-md border border-gray-300 dark:border-gray-600 w-8 h-8 cursor-pointer hover:border-gray-400">
+          <input
+            type="color"
+            onInput={(event: any) => editor.chain().focus().setColor(event.target.value).run()}
+            value={editor.getAttributes('textStyle').color || '#000000'}
+            className="absolute -top-2 -left-2 w-12 h-12 cursor-pointer p-0 border-0"
+            title="Text Color"
+          />
+        </div>
+
+        <Divider />
+
+        <ToolbarButton onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} isActive={editor.isActive('heading', { level: 2 })} icon={Heading2} />
+        <ToolbarButton onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()} isActive={editor.isActive('heading', { level: 3 })} icon={Heading3} />
+        <ToolbarButton onClick={() => editor.chain().focus().toggleBlockquote().run()} isActive={editor.isActive('blockquote')} icon={Quote} />
+
+        <Divider />
+
+        <ToolbarButton onClick={() => editor.chain().focus().setTextAlign('left').run()} isActive={editor.isActive({ textAlign: 'left' })} icon={AlignLeft} />
+        <ToolbarButton onClick={() => editor.chain().focus().setTextAlign('center').run()} isActive={editor.isActive({ textAlign: 'center' })} icon={AlignCenter} />
+        <ToolbarButton onClick={() => editor.chain().focus().setTextAlign('right').run()} isActive={editor.isActive({ textAlign: 'right' })} icon={AlignRight} />
+        <ToolbarButton onClick={() => editor.chain().focus().setTextAlign('justify').run()} isActive={editor.isActive({ textAlign: 'justify' })} icon={AlignJustify} />
+
+        <Divider />
+
+        <ToolbarButton onClick={() => editor.chain().focus().toggleBulletList().run()} isActive={editor.isActive('bulletList')} icon={List} />
+        <ToolbarButton onClick={() => editor.chain().focus().toggleOrderedList().run()} isActive={editor.isActive('orderedList')} icon={ListOrdered} />
+
+        <Divider />
+        
+        <CldUploadWidget 
+          uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "unsigned_preset"} 
+          options={{ maxFiles: 1 }}
+          onSuccess={(result: any, { widget }) => {
+            if (result.info?.secure_url) {
+              editor.chain().focus().setImage({ src: result.info.secure_url }).run()
+              widget.close()
+            }
+          }}
         >
-          Image
-        </button>
+          {({ open }) => (
+            <ToolbarButton onClick={() => open()} icon={ImageIcon} />
+          )}
+        </CldUploadWidget>
+
       </div>
-      <EditorContent editor={editor} />
+      
+      {/* Editor Canvas Area */}
+      <div className="flex-1 overflow-y-auto p-8 flex justify-center bg-[#F3F4F6] dark:bg-[#12141C]">
+        <EditorContent editor={editor} className="w-full max-w-[816px]" />
+      </div>
     </div>
   )
 }

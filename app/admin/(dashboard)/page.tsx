@@ -40,18 +40,21 @@ export default async function AdminDashboard() {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Dashboard Overview</h1>
-        <Link href="/admin/posts/new" className="px-4 py-2 bg-[#4F6DF5] text-white rounded-lg hover:bg-[#3B3FA0] transition-colors font-medium shadow-sm">
-          Write New Post
+      <div className="flex justify-between items-center mb-10">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-1">Welcome back. Here's what's happening today.</p>
+        </div>
+        <Link href="/admin/posts/new" className="px-5 py-2.5 bg-[#000000] dark:bg-[#FFFFFF] text-white dark:text-black rounded-lg hover:opacity-90 transition-opacity font-semibold shadow-sm flex items-center gap-2">
+          <span>Write New Post</span>
         </Link>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
         {stats.map((stat) => (
-          <div key={stat.label} className="bg-white dark:bg-[#1A1D27] p-6 rounded-2xl border border-gray-100 dark:border-[#2A2D3A] shadow-sm hover:shadow-md transition-shadow">
-            <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium mb-2">{stat.label}</h3>
-            <p className={`text-4xl font-bold ${stat.color}`}>{stat.value}</p>
+          <div key={stat.label} className="bg-white dark:bg-[#1A1D27] p-5 rounded-xl border border-gray-200 dark:border-[#2A2D3A] shadow-sm flex flex-col justify-between">
+            <h3 className="text-gray-500 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider mb-3">{stat.label}</h3>
+            <p className={`text-3xl font-bold tracking-tight ${stat.color}`}>{stat.value}</p>
           </div>
         ))}
       </div>

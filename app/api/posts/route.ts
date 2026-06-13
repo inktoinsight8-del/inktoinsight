@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json()
-    const { title, slug, excerpt, content, categoryId, tags, status } = body
+    const { title, slug, excerpt, content, coverImage, categoryId, tags, status } = body
 
     // 1. Ensure tags exist or create them
     const tagConnections = []
@@ -32,6 +32,7 @@ export async function POST(req: Request) {
         slug,
         excerpt,
         content,
+        coverImage,
         status,
         author: session.user.name || 'Sanju',
         category: {

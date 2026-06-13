@@ -25,35 +25,38 @@ export default async function AdminLayout({
             </Link>
           </div>
           
-          <nav className="flex-1 space-y-2">
-            <Link href="/admin" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#2A2D3A] transition-colors font-medium">
-              <LayoutDashboard size={20} className="text-gray-500" />
+          <nav className="flex-1 space-y-1.5 mt-4">
+            <Link href="/admin" className="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-[#2A2D3A] transition-all text-sm font-semibold text-gray-700 dark:text-gray-300">
+              <LayoutDashboard size={18} className="text-gray-400" />
               Dashboard
             </Link>
-            <Link href="/admin/posts" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#2A2D3A] transition-colors font-medium">
-              <FileText size={20} className="text-gray-500" />
+            <Link href="/admin/posts" className="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-[#2A2D3A] transition-all text-sm font-semibold text-gray-700 dark:text-gray-300">
+              <FileText size={18} className="text-gray-400" />
               All Posts
             </Link>
-            <Link href="/admin/posts/new" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#2A2D3A] transition-colors font-medium">
-              <PlusCircle size={20} className="text-gray-500" />
+            <Link href="/admin/posts/new" className="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-[#4F6DF5]/10 text-[#4F6DF5] transition-all text-sm font-semibold">
+              <PlusCircle size={18} />
               New Post
             </Link>
-            <Link href="/admin/settings" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#2A2D3A] transition-colors font-medium">
-              <Settings size={20} className="text-gray-500" />
+            <Link href="/admin/settings" className="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-[#2A2D3A] transition-all text-sm font-semibold text-gray-700 dark:text-gray-300">
+              <Settings size={18} className="text-gray-400" />
               Settings
             </Link>
           </nav>
 
-          <div className="mt-8 border-t border-gray-200 dark:border-[#2A2D3A] pt-4">
-            <div className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 mb-2">
-              Signed in as <strong>{session.user.name}</strong>
+          <div className="mt-8 border-t border-gray-100 dark:border-[#2A2D3A] pt-6">
+            <div className="px-4 py-2 text-xs font-medium uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-2">
+              Account
+            </div>
+            <div className="px-4 py-2 text-sm text-gray-900 dark:text-white font-medium mb-2 truncate">
+              {session.user.name}
             </div>
             <form action={async () => {
               "use server"
               await signOut()
             }}>
-              <button type="submit" className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 transition-colors font-medium">
-                <LogOut size={20} />
+              <button type="submit" className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 transition-all text-sm font-semibold">
+                <LogOut size={18} />
                 Sign Out
               </button>
             </form>

@@ -4,12 +4,14 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import TiptapEditor from "@/components/TiptapEditor"
 import toast from "react-hot-toast"
+import { CldUploadWidget } from "next-cloudinary"
 
 export default function PostEditorForm({ categories }: { categories: any[] }) {
   const router = useRouter()
   const [title, setTitle] = useState("")
   const [slug, setSlug] = useState("")
   const [excerpt, setExcerpt] = useState("")
+  const [coverImage, setCoverImage] = useState("")
   const [categoryId, setCategoryId] = useState(categories[0]?.id || "")
   const [tags, setTags] = useState("")
   const [content, setContent] = useState("")
@@ -27,7 +29,7 @@ export default function PostEditorForm({ categories }: { categories: any[] }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          title, slug, excerpt, content, categoryId, tags: tagList, status
+          title, slug, excerpt, content, coverImage, categoryId, tags: tagList, status
         })
       })
 
@@ -116,6 +118,43 @@ export default function PostEditorForm({ categories }: { categories: any[] }) {
                   onChange={e => setExcerpt(e.target.value)}
                   className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-[#2A2D3A] bg-white dark:bg-[#0F1117] min-h-[80px]"
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Cover Image</label>
+                {coverImage ? (
+                  <div className="relative mb-2">
+                    <img src={coverImage} alt="Cover" className="w-full h-32 object-cover rounded-lg border border-gray-200 dark:border-[#2A2D3A]" />
+                    <button 
+                      type="button"
+                      onClick={() => setCoverImage("")}
+                      className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 shadow"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ) : (
+                  <CldUploadWidget 
+                    uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "unsigned_preset"} 
+                    options={{ maxFiles: 1 }}
+                    onSuccess={(result: any, { widget }) => {
+                      if (result.info?.secure_url) {
+                        setCoverImage(result.info.secure_url)
+                        widget.close()
+                      }
+                    }}
+                  >
+                    {({ open }) => (
+                      <button 
+                        type="button" 
+                        onClick={() => open()}
+                        className="w-full px-4 py-3 border-2 border-dashed border-gray-300 dark:border-[#2A2D3A] rounded-lg text-gray-500 dark:text-gray-400 hover:border-[#4F6DF5] hover:text-[#4F6DF5] transition-colors flex items-center justify-center font-medium"
+                      >
+                        Upload Cover Image
+                      </button>
+                    )}
+                  </CldUploadWidget>
+                )}
               </div>
 
               <div>

@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma"
 import Link from "next/link"
 import { format } from "date-fns"
+import Image from "next/image"
 
 export default async function BlogPage({ searchParams }: { searchParams: Promise<{ category?: string }> }) {
   const { category: categoryFilter } = await searchParams
@@ -43,7 +44,16 @@ export default async function BlogPage({ searchParams }: { searchParams: Promise
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
         {posts.map((post: any) => (
           <Link href={`/blog/${post.slug}`} key={post.id} className="group flex flex-col md:flex-row bg-white dark:bg-[#1A1D27] rounded-2xl overflow-hidden border border-gray-100 dark:border-[#2A2D3A] shadow-sm hover:shadow-xl hover:border-[#4F6DF5]/50 transition-all duration-300">
-            <div className="md:w-1/3 aspect-video md:aspect-auto bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 relative">
+            <div className="md:w-1/3 aspect-video md:aspect-auto bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 relative overflow-hidden min-h-[160px]">
+              {post.coverImage && (
+                <Image
+                  src={post.coverImage}
+                  alt={post.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              )}
             </div>
             <div className="p-6 md:w-2/3 flex flex-col justify-center">
               <div className="flex items-center gap-3 mb-2">
