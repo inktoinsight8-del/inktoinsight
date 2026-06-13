@@ -40,29 +40,33 @@ export default async function HomePage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {latestPosts.map((post: any) => (
-            <Link href={`/blog/${post.slug}`} key={post.id} className="group flex flex-col bg-white dark:bg-[#1A1D27] rounded-2xl overflow-hidden border border-gray-100 dark:border-[#2A2D3A] shadow-sm hover:shadow-xl hover:border-[#4F6DF5]/50 transition-all duration-300">
-              <div className="aspect-video bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 relative overflow-hidden">
+            <Link 
+              href={`/blog/${post.slug}`} 
+              key={post.id} 
+              className="group flex flex-col bg-white dark:bg-[#1A1D27] rounded-2xl overflow-hidden border border-gray-200/50 dark:border-[#2A2D3A]/50 shadow-sm hover:shadow-xl hover:-translate-y-1.5 hover:border-[#4F6DF5]/40 transition-all duration-500"
+            >
+              <div className="aspect-video bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/20 dark:to-purple-950/20 relative overflow-hidden">
                 {post.coverImage && (
                   <Image
                     src={post.coverImage}
                     alt={post.title}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                   />
                 )}
               </div>
               <div className="p-6 flex-1 flex flex-col">
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#F5A623]">
+                <div className="flex items-center gap-3 mb-3.5">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#4F6DF5] dark:text-[#8E9EFE] bg-[#4F6DF5]/8 dark:bg-[#8E9EFE]/8 px-2.5 py-0.5 rounded-full">
                     {post.category?.name}
                   </span>
-                  <span className="text-gray-400 text-sm">·</span>
-                  <span className="text-gray-500 dark:text-gray-400 text-sm">
+                  <span className="text-gray-300 dark:text-gray-700 text-sm">·</span>
+                  <span className="text-gray-500 dark:text-gray-400 text-xs font-semibold">
                     {format(new Date(post.createdAt), 'MMM d, yyyy')}
                   </span>
                 </div>
-                <h3 className="text-xl font-bold mb-2 group-hover:text-[#4F6DF5] transition-colors line-clamp-2">
+                <h3 className="text-lg font-bold mb-2 text-gray-900 dark:text-white group-hover:text-[#4F6DF5] dark:group-hover:text-[#8E9EFE] transition-colors duration-300 line-clamp-2 leading-snug">
                   {post.title}
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-3 mb-4 flex-1">
