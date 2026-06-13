@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma"
-import DOMPurify from 'isomorphic-dompurify'
+
 import { notFound } from "next/navigation"
 import { format } from "date-fns"
 import ReadingProgress from "@/components/ReadingProgress"
@@ -57,7 +57,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ slu
 
         <div
           className="prose dark:prose-invert max-w-none prose-lg md:prose-xl prose-headings:font-bold prose-headings:tracking-tight prose-a:text-[#4F6DF5] dark:prose-a:text-[#8E9EFE] prose-a:no-underline hover:prose-a:underline prose-blockquote:border-l-4 prose-blockquote:border-[#4F6DF5] dark:prose-blockquote:border-[#8E9EFE] prose-blockquote:italic prose-blockquote:font-serif prose-img:rounded-2xl"
-          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
+          dangerouslySetInnerHTML={{ __html: post.content }}
         />
 
         <div className="mt-12 pt-8 border-t border-gray-200 dark:border-[#2A2D3A]">
