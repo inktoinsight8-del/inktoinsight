@@ -1,0 +1,78 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String   // bcrypt hash
+  bio       String?
+}
+
+model Post {
+  id          String     @id @default(cuid())
+  title       String
+  slug        String     @unique
+  excerpt     String?
+  content     String     // HTML or JSON from Tiptap
+  coverImage  String?    // URL or gradient identifier
+  category    Category   @relation(fields: [categoryId], references: [id])
+  categoryId  String
+  tags        Tag[]      @relation("PostTags")
+  author      String     @default("Sanju")
+  readTime    String?
+  status      Status     @default(DRAFT)
+  likes       Int        @default(0)
+  views       Int        @default(0)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  comments    Comment[]
+}
+
+model Category {
+  id    String @id @default(cuid())
+  name  String @unique // Finance, Tech & AI, Culture, Personal, Leadership, Product
+  posts Post[]
+}
+
+model Tag {
+  id    String @id @default(cuid())
+  name  String @unique
+  posts Post[] @relation("PostTags")
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id])
+  name      String
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model Subscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
+
+model Settings {
+  id           String @id @default("singleton")
+  blogName     String @default("Ink&Insight")
+  tagline      String @default("Where Ink Meets Market Insight")
+  postsPerPage Int    @default(6)
+}
+
+enum Status {
+  DRAFT
+  PUBLISHED
+}
