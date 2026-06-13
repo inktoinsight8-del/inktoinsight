@@ -9,13 +9,38 @@ import ViewTracker from "@/components/ViewTracker"
 
 export default async function PostDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const post = await prisma.post.findUnique({
-    where: { slug },
+  let decodedSlug = slug
+  try {
+    decodedSlug = decodeURIComponent(slug)
+  } catch (e) {}
+
+  let post = await prisma.post.findUnique({
+    where: { slug: decodedSlug },
     include: { category: true, tags: true }
   })
 
+  if (!post) {
+    post = await prisma.post.findUnique({
+      where: { slug },
+      include: { category: true, tags: true }
+    })
+  }
+
+  if (!post) {
+    post = await prisma.post.findUnique({
+      where: { slug: encodeURIComponent(decodedSlug) },
+      include: { category: true, tags: true }
+    })
+  }
+
   if (!post || post.status !== 'PUBLISHED') {
-    notFound()
+    return (
+      <div className="max-w-3xl mx-auto py-20 text-center">
+        <h1 className="text-3xl font-bold mb-4">Post Not Found</h1>
+        <p className="text-gray-500">We could not find a published post at this URL.</p>
+        <a href="/blog" className="inline-block mt-6 text-[#4F6DF5] font-semibold hover:underline">&larr; Back to all posts</a>
+      </div>
+    )
   }
 
 
