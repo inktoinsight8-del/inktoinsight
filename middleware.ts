@@ -31,8 +31,8 @@ export default auth((req) => {
     }
     
     // Rewrite all other requests on the admin domain to the /admin folder if they aren't already
-    // Actually, if we type "admin.inkandinsight.in/dashboard", we want to rewrite to "/admin/dashboard"
-    if (!pathname.startsWith("/admin") && !pathname.startsWith("/api") && !pathname.startsWith("/_next")) {
+    // Skip static files with extensions (containing a dot) so they serve correctly from the public folder
+    if (!pathname.startsWith("/admin") && !pathname.startsWith("/api") && !pathname.startsWith("/_next") && !pathname.includes(".")) {
       url.pathname = `/admin${pathname}`
       return NextResponse.rewrite(url)
     }
