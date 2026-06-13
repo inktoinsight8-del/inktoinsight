@@ -5,9 +5,11 @@ export default auth((req) => {
   const url = req.nextUrl
   const hostname = req.headers.get("host") || ""
   
-  // Is this an admin domain request?
-  // Admin if it's the vercel.app deployment, or if localhost has 'admin.' prefix.
-  const isAdminDomain = hostname.includes("vercel.app") || hostname.startsWith("admin.") || hostname.includes("admin.localhost")
+  const isAdminDomain = 
+    hostname.includes("vercel.app") || 
+    hostname.startsWith("admin.") || 
+    hostname.includes("admin.localhost") ||
+    hostname.includes("infotoinsight.space")
   
   const isLoggedIn = !!req.auth
   const pathname = url.pathname
