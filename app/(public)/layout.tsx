@@ -11,9 +11,10 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
           {/* Logo */}
           <Link 
             href="/" 
-            className="font-serif italic text-2xl font-black tracking-tight text-[#1A1A2E] dark:text-white hover:opacity-90 transition-opacity duration-300 flex-shrink-0"
+            className="font-serif italic text-2xl font-black tracking-tight text-[#1A1A2E] dark:text-white hover:opacity-90 transition-opacity duration-300 flex-shrink-0 flex items-center gap-2"
           >
-            Ink<span className="text-[#D15B3D] dark:text-[#E25C5C]">&</span>Insight
+            <img src="/logo.png" alt="Logo" className="w-8 h-8 rounded-lg object-cover" />
+            <span>inktoinsight</span>
           </Link>
           
           {/* Search bar */}
@@ -65,15 +66,6 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
             >
               Subscribe
             </Link>
-
-            {/* Admin */}
-            <Link 
-              href="/admin" 
-              className="flex items-center gap-1 px-4 py-2 bg-[#D15B3D] hover:bg-[#B54A2F] text-white rounded-full text-xs font-bold transition-all shadow-sm shadow-[#D15B3D]/20 active:scale-95"
-            >
-              <span>Admin</span>
-              <ArrowUpRight size={12} />
-            </Link>
           </div>
         </div>
       </header>
@@ -86,7 +78,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-12 flex flex-col md:flex-row justify-between items-center gap-6">
           <div>
             <div className="font-serif italic text-xl font-bold text-[#1A1A2E] dark:text-white mb-2">
-              Ink<span className="text-[#D15B3D] dark:text-[#E25C5C]">&</span>Insight
+              inktoinsight
             </div>
             <p className="text-gray-500 dark:text-gray-400 text-sm">Where Ink Meets Market Insight.</p>
           </div>
@@ -94,7 +86,6 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
           <div className="flex gap-6 text-sm text-gray-500 dark:text-gray-400">
             <a href="https://twitter.com" target="_blank" rel="noreferrer" className="hover:text-[#D15B3D] transition-colors">Twitter</a>
             <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="hover:text-[#D15B3D] transition-colors">LinkedIn</a>
-            <Link href="/admin" className="hover:text-[#D15B3D] transition-colors">Admin</Link>
           </div>
         </div>
       </footer>

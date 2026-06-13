@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Ink&Insight",
+  title: "inktoinsight",
   description: "Where Ink Meets Market Insight",
 };
 

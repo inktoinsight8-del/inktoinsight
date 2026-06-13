@@ -17,6 +17,140 @@ import {
 } from 'lucide-react'
 import { CldUploadWidget } from 'next-cloudinary'
 
+// Catalog of 100 carefully selected fonts
+const FONTS_CATALOG = [
+  // System / Defaults
+  { name: "Default (Inter)", value: "Inter" },
+  { name: "Serif", value: "serif" },
+  { name: "Monospace", value: "monospace" },
+  { name: "Comic Sans", value: "Comic Sans MS, Comic Sans" },
+
+  // Sans-Serif (30 fonts)
+  { name: "Roboto", value: "Roboto" },
+  { name: "Open Sans", value: "Open Sans" },
+  { name: "Montserrat", value: "Montserrat" },
+  { name: "Poppins", value: "Poppins" },
+  { name: "Lato", value: "Lato" },
+  { name: "Oswald", value: "Oswald" },
+  { name: "Nunito", value: "Nunito" },
+  { name: "Rubik", value: "Rubik" },
+  { name: "Work Sans", value: "Work Sans" },
+  { name: "DM Sans", value: "DM Sans" },
+  { name: "Plus Jakarta Sans", value: "Plus Jakarta Sans" },
+  { name: "Outfit", value: "Outfit" },
+  { name: "Satoshi", value: "Satoshi" },
+  { name: "Public Sans", value: "Public Sans" },
+  { name: "Ubuntu", value: "Ubuntu" },
+  { name: "Kanit", value: "Kanit" },
+  { name: "Heebo", value: "Heebo" },
+  { name: "Mukta", value: "Mukta" },
+  { name: "Prompt", value: "Prompt" },
+  { name: "Barlow", value: "Barlow" },
+  { name: "Cabin", value: "Cabin" },
+  { name: "Karla", value: "Karla" },
+  { name: "Manrope", value: "Manrope" },
+  { name: "Arimo", value: "Arimo" },
+  { name: "Quicksand", value: "Quicksand" },
+  { name: "Urbanist", value: "Urbanist" },
+  { name: "Inter Tight", value: "Inter Tight" },
+  { name: "Barlow Condensed", value: "Barlow Condensed" },
+  { name: "Noto Sans Display", value: "Noto Sans Display" },
+  { name: "Sora", value: "Sora" },
+
+  // Serif (25 fonts)
+  { name: "Playfair Display", value: "Playfair Display" },
+  { name: "Merriweather", value: "Merriweather" },
+  { name: "Lora", value: "Lora" },
+  { name: "PT Serif", value: "PT Serif" },
+  { name: "Noto Serif", value: "Noto Serif" },
+  { name: "EB Garamond", value: "EB Garamond" },
+  { name: "Crimson Text", value: "Crimson Text" },
+  { name: "Georgia", value: "Georgia" },
+  { name: "Baskerville", value: "Baskerville" },
+  { name: "Cardo", value: "Cardo" },
+  { name: "Libre Baskerville", value: "Libre Baskerville" },
+  { name: "Arvo", value: "Arvo" },
+  { name: "Josefin Slab", value: "Josefin Slab" },
+  { name: "Bitter", value: "Bitter" },
+  { name: "DM Serif Display", value: "DM Serif Display" },
+  { name: "Fraunces", value: "Fraunces" },
+  { name: "Cinzel", value: "Cinzel" },
+  { name: "Cormorant Garamond", value: "Cormorant Garamond" },
+  { name: "Domine", value: "Domine" },
+  { name: "Prata", value: "Prata" },
+  { name: "Playfair", value: "Playfair" },
+  { name: "Noto Serif Display", value: "Noto Serif Display" },
+  { name: "Crimson Pro", value: "Crimson Pro" },
+  { name: "Old Standard TT", value: "Old Standard TT" },
+  { name: "Lustria", value: "Lustria" },
+
+  // Monospace (15 fonts)
+  { name: "Fira Code", value: "Fira Code" },
+  { name: "Source Code Pro", value: "Source Code Pro" },
+  { name: "JetBrains Mono", value: "JetBrains Mono" },
+  { name: "Inconsolata", value: "Inconsolata" },
+  { name: "Roboto Mono", value: "Roboto Mono" },
+  { name: "Space Mono", value: "Space Mono" },
+  { name: "Share Tech Mono", value: "Share Tech Mono" },
+  { name: "VT323", value: "VT323" },
+  { name: "Ubuntu Mono", value: "Ubuntu Mono" },
+  { name: "Anonymous Pro", value: "Anonymous Pro" },
+  { name: "Courier Prime", value: "Courier Prime" },
+  { name: "Cutive Mono", value: "Cutive Mono" },
+  { name: "Share Tech", value: "Share Tech" },
+  { name: "Fira Mono", value: "Fira Mono" },
+  { name: "Nova Mono", value: "Nova Mono" },
+
+  // Display / Handwriting / Creative (26 fonts)
+  { name: "Pacifico", value: "Pacifico" },
+  { name: "Lobster", value: "Lobster" },
+  { name: "Caveat", value: "Caveat" },
+  { name: "Dancing Script", value: "Dancing Script" },
+  { name: "Shadows Into Light", value: "Shadows Into Light" },
+  { name: "Indie Flower", value: "Indie Flower" },
+  { name: "Great Vibes", value: "Great Vibes" },
+  { name: "Amatic SC", value: "Amatic SC" },
+  { name: "Sacramento", value: "Sacramento" },
+  { name: "Satisfy", value: "Satisfy" },
+  { name: "Yellowtail", value: "Yellowtail" },
+  { name: "Kaushan Script", value: "Kaushan Script" },
+  { name: "Gloria Hallelujah", value: "Gloria Hallelujah" },
+  { name: "Courgette", value: "Courgette" },
+  { name: "Allura", value: "Allura" },
+  { name: "Alex Brush", value: "Alex Brush" },
+  { name: "Cookie", value: "Cookie" },
+  { name: "Cinzel Decorative", value: "Cinzel Decorative" },
+  { name: "Comfortaa", value: "Comfortaa" },
+  { name: "Syncopate", value: "Syncopate" },
+  { name: "Righteous", value: "Righteous" },
+  { name: "Bangers", value: "Bangers" },
+  { name: "Press Start 2P", value: "Press Start 2P" },
+  { name: "Permanent Marker", value: "Permanent Marker" },
+  { name: "Special Elite", value: "Special Elite" },
+  { name: "Rock Salt", value: "Rock Salt" }
+]
+
+// Helper to inject Google Font dynamically in the document head
+const loadGoogleFont = (fontName: string) => {
+  if (typeof window === "undefined") return
+  
+  // Clean up font family string to isolate name
+  const formattedName = fontName.split(',')[0].trim().replace(/['"]/g, '')
+  
+  // Avoid loading system fonts via external request
+  const systemFonts = ["serif", "sans-serif", "monospace", "Arial", "Courier New", "Georgia", "Times New Roman", "Trebuchet MS", "Verdana", "Inter"]
+  if (systemFonts.includes(formattedName)) return
+
+  const fontId = `gfont-${formattedName.replace(/\s+/g, '-').toLowerCase()}`
+  if (!document.getElementById(fontId)) {
+    const link = document.createElement('link')
+    link.id = fontId
+    link.rel = 'stylesheet'
+    link.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(formattedName)}:wght@400;500;700&display=swap`
+    document.head.appendChild(link)
+  }
+}
+
 export default function TiptapEditor({ content, onChange }: { content: string, onChange: (content: string) => void }) {
   const editor = useEditor({
     extensions: [
@@ -61,6 +195,11 @@ export default function TiptapEditor({ content, onChange }: { content: string, o
 
   const Divider = () => <div className="w-px h-6 bg-gray-300 dark:bg-gray-700 mx-1 self-center"></div>
 
+  const handleFontChange = (fontValue: string) => {
+    loadGoogleFont(fontValue)
+    editor.chain().focus().setFontFamily(fontValue).run()
+  }
+
   return (
     <div className="w-full flex flex-col bg-gray-100 dark:bg-[#1A1D27] rounded-xl border border-gray-200 dark:border-[#2A2D3A] overflow-hidden shadow-inner">
       <div className="flex flex-wrap items-center gap-1 p-2 bg-[#F9FBFD] dark:bg-[#0F1117] border-b border-gray-200 dark:border-[#2A2D3A] sticky top-0 z-10 shadow-sm">
@@ -70,14 +209,17 @@ export default function TiptapEditor({ content, onChange }: { content: string, o
         
         <Divider />
 
+        {/* 100 Font Selector Dropdown */}
         <select
-          onChange={(event) => editor.chain().focus().setFontFamily(event.target.value).run()}
-          className="px-2 py-1.5 text-sm border-transparent hover:bg-gray-100 focus:bg-white rounded-md bg-transparent dark:text-white dark:hover:bg-[#2A2D3A] cursor-pointer outline-none transition-colors"
+          onChange={(event) => handleFontChange(event.target.value)}
+          value={editor.getAttributes('textStyle').fontFamily || "Inter"}
+          className="px-2 py-1.5 text-xs border border-gray-300 dark:border-gray-700 hover:bg-gray-100 focus:bg-white rounded-md bg-transparent dark:text-white dark:hover:bg-[#2A2D3A] cursor-pointer outline-none transition-colors max-w-[150px]"
         >
-          <option value="Inter">Inter</option>
-          <option value="Comic Sans MS, Comic Sans">Comic Sans</option>
-          <option value="serif">Serif</option>
-          <option value="monospace">Monospace</option>
+          {FONTS_CATALOG.map((font) => (
+            <option key={font.value} value={font.value} className="bg-white dark:bg-[#1A1D27]">
+              {font.name}
+            </option>
+          ))}
         </select>
 
         <Divider />

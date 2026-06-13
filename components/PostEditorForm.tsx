@@ -6,58 +6,90 @@ import TiptapEditor from "@/components/TiptapEditor"
 import toast from "react-hot-toast"
 import { CldUploadWidget } from "next-cloudinary"
 
-export default function PostEditorForm({ categories }: { categories: any[] }) {
+export default function PostEditorForm({ 
+  categories, 
+  initialPost 
+}: { 
+  categories: any[]
+  initialPost?: {
+    id: string
+    title: string
+    slug: string
+    excerpt: string | null
+    content: string
+    coverImage: string | null
+    categoryId: string
+    status: string
+    tags: { name: string }[]
+  }
+}) {
   const router = useRouter()
-  const [title, setTitle] = useState("")
-  const [slug, setSlug] = useState("")
-  const [excerpt, setExcerpt] = useState("")
-  const [coverImage, setCoverImage] = useState("")
-  const [categoryId, setCategoryId] = useState(categories[0]?.id || "")
-  const [tags, setTags] = useState("")
-  const [content, setContent] = useState("")
-  const [status, setStatus] = useState("DRAFT")
+  const isEditing = !!initialPost
+
+  const [title, setTitle] = useState(initialPost?.title || "")
+  const [slug, setSlug] = useState(initialPost?.slug || "")
+  const [excerpt, setExcerpt] = useState(initialPost?.excerpt || "")
+  const [coverImage, setCoverImage] = useState(initialPost?.coverImage || "")
+  const [categoryId, setCategoryId] = useState(initialPost?.categoryId || categories[0]?.id || "")
+  const [tags, setTags] = useState(initialPost?.tags ? initialPost.tags.map(t => t.name).join(", ") : "")
+  const [content, setContent] = useState(initialPost?.content || "")
+  const [status, setStatus] = useState(initialPost?.status || "DRAFT")
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleSubmit = async (e: React.FormEvent, overrideStatus?: string) => {
+    if (e) e.preventDefault()
     setIsSubmitting(true)
     
+    const targetStatus = overrideStatus || status
+
     try {
       const tagList = tags.split(',').map(t => t.trim()).filter(Boolean)
       
-      const res = await fetch("/api/posts", {
-        method: "POST",
+      const endpoint = isEditing ? `/api/posts/${initialPost.id}` : "/api/posts"
+      const method = isEditing ? "PUT" : "POST"
+
+      const res = await fetch(endpoint, {
+        method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          title, slug, excerpt, content, coverImage, categoryId, tags: tagList, status
+          title, 
+          slug, 
+          excerpt: excerpt.trim() || null, 
+          content, 
+          coverImage: coverImage || null, 
+          categoryId, 
+          tags: tagList, 
+          status: targetStatus
         })
       })
 
+      const data = await res.json()
+
       if (!res.ok) {
-        throw new Error("Failed to save post")
+        throw new Error(data.error || "Failed to save post")
       }
       
-      toast.success(status === 'PUBLISHED' ? 'Post published!' : 'Draft saved!')
+      toast.success(targetStatus === 'PUBLISHED' ? 'Post published!' : 'Draft saved!')
       router.push("/admin/posts")
       router.refresh()
-    } catch (error) {
+    } catch (error: any) {
       console.error(error)
-      toast.error("Error saving post")
+      toast.error(error.message || "Error saving post")
     } finally {
       setIsSubmitting(false)
     }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={(e) => handleSubmit(e)} className="space-y-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">New Post</h1>
+        <h1 className="text-3xl font-bold">{isEditing ? "Edit Post" : "New Post"}</h1>
         <div className="flex gap-3">
           <button 
             type="button" 
-            onClick={() => { setStatus("DRAFT"); handleSubmit(new Event('submit') as any) }}
+            onClick={() => { setStatus("DRAFT"); handleSubmit(null as any, "DRAFT") }}
             disabled={isSubmitting}
-            className="px-4 py-2 bg-gray-100 dark:bg-[#2A2D3A] rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 font-medium"
+            className="px-4 py-2 bg-gray-100 dark:bg-[#2A2D3A] rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 font-medium cursor-pointer"
           >
             Save as Draft
           </button>
@@ -65,9 +97,9 @@ export default function PostEditorForm({ categories }: { categories: any[] }) {
             type="submit" 
             onClick={() => setStatus("PUBLISHED")}
             disabled={isSubmitting}
-            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium"
+            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium cursor-pointer"
           >
-            Publish
+            {isEditing ? "Update Post" : "Publish"}
           </button>
         </div>
       </div>
@@ -82,7 +114,9 @@ export default function PostEditorForm({ categories }: { categories: any[] }) {
               value={title} 
               onChange={e => {
                 setTitle(e.target.value)
-                setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, ''))
+                if (!isEditing) {
+                  setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, ''))
+                }
               }}
               className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-[#2A2D3A] bg-white dark:bg-[#0F1117] focus:ring-2 focus:ring-[#4F6DF5] focus:outline-none"
               placeholder="Post title"
@@ -148,7 +182,7 @@ export default function PostEditorForm({ categories }: { categories: any[] }) {
                       <button 
                         type="button" 
                         onClick={() => open()}
-                        className="w-full px-4 py-3 border-2 border-dashed border-gray-300 dark:border-[#2A2D3A] rounded-lg text-gray-500 dark:text-gray-400 hover:border-[#4F6DF5] hover:text-[#4F6DF5] transition-colors flex items-center justify-center font-medium"
+                        className="w-full px-4 py-3 border-2 border-dashed border-gray-300 dark:border-[#2A2D3A] rounded-lg text-gray-500 dark:text-gray-400 hover:border-[#4F6DF5] hover:text-[#4F6DF5] transition-colors flex items-center justify-center font-medium cursor-pointer"
                       >
                         Upload Cover Image
                       </button>

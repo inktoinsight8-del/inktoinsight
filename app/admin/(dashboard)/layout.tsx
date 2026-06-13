@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { LogOut, LayoutDashboard, FileText, Settings, PlusCircle, Folder } from 'lucide-react'
+import { LogOut, LayoutDashboard, FileText, Settings, PlusCircle, Folder, Users } from 'lucide-react'
 import { auth, signOut } from '@/auth'
 import { redirect } from 'next/navigation'
 
@@ -20,8 +20,9 @@ export default async function AdminLayout({
       <aside className="w-full md:w-64 bg-white dark:bg-[#1A1D27] border-b md:border-r border-gray-200 dark:border-[#2A2D3A] flex-shrink-0">
         <div className="p-6 h-full flex flex-col">
           <div className="mb-8 flex items-center justify-between md:justify-start gap-4">
-            <Link href="/admin" className="font-serif italic text-2xl font-bold tracking-tight text-[#3B3FA0] dark:text-[#4F6DF5]">
-              Ink&Insight
+            <Link href="/admin" className="flex items-center gap-2 font-serif italic text-2xl font-bold tracking-tight text-[#3B3FA0] dark:text-[#4F6DF5]">
+              <img src="/logo.png" alt="Logo" className="w-8 h-8 rounded-lg object-cover bg-white" />
+              <span>inktoinsight</span>
             </Link>
           </div>
           
@@ -41,6 +42,10 @@ export default async function AdminLayout({
             <Link href="/admin/categories" className="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-[#2A2D3A] transition-all text-sm font-semibold text-gray-700 dark:text-gray-300">
               <Folder size={18} className="text-gray-400" />
               Categories
+            </Link>
+            <Link href="/admin/users" className="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-[#2A2D3A] transition-all text-sm font-semibold text-gray-700 dark:text-gray-300">
+              <Users size={18} className="text-gray-400" />
+              Users
             </Link>
             <Link href="/admin/settings" className="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-[#2A2D3A] transition-all text-sm font-semibold text-gray-700 dark:text-gray-300">
               <Settings size={18} className="text-gray-400" />
