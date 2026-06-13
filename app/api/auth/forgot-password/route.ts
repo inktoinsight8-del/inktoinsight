@@ -1,9 +1,16 @@
 import { NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
 import { sendResetCode } from "@/lib/mail"
+import { rateLimit } from "@/lib/rate-limit"
 
 export async function POST(req: Request) {
   try {
+    // Basic IP-based rate limit
+    const ip = req.headers.get("x-forwarded-for") || "unknown"
+    if (!rateLimit(ip, 5, 15 * 60 * 1000)) { // 5 requests per 15 minutes
+      return NextResponse.json({ error: "Too many requests. Try again later." }, { status: 429 })
+    }
+
     const { email } = await req.json()
 
     if (!email) {

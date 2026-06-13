@@ -1,9 +1,11 @@
 import prisma from "@/lib/prisma"
+import DOMPurify from 'isomorphic-dompurify'
 import { notFound } from "next/navigation"
 import { format } from "date-fns"
 import ReadingProgress from "@/components/ReadingProgress"
 import PostActions from "@/components/PostActions"
 import Image from "next/image"
+import ViewTracker from "@/components/ViewTracker"
 
 export default async function PostDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
@@ -16,14 +18,10 @@ export default async function PostDetailPage({ params }: { params: Promise<{ slu
     notFound()
   }
 
-  // Increment views
-  await prisma.post.update({
-    where: { id: post.id },
-    data: { views: { increment: 1 } }
-  })
 
   return (
     <>
+      <ViewTracker postId={post.id} />
       <ReadingProgress />
       <article className="max-w-3xl mx-auto relative pb-20">
         <header className="mb-12 text-center">
@@ -59,7 +57,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ slu
 
         <div
           className="prose dark:prose-invert max-w-none prose-lg md:prose-xl prose-headings:font-bold prose-headings:tracking-tight prose-a:text-[#4F6DF5] dark:prose-a:text-[#8E9EFE] prose-a:no-underline hover:prose-a:underline prose-blockquote:border-l-4 prose-blockquote:border-[#4F6DF5] dark:prose-blockquote:border-[#8E9EFE] prose-blockquote:italic prose-blockquote:font-serif prose-img:rounded-2xl"
-          dangerouslySetInnerHTML={{ __html: post.content }}
+          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
         />
 
         <div className="mt-12 pt-8 border-t border-gray-200 dark:border-[#2A2D3A]">

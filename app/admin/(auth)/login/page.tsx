@@ -3,18 +3,21 @@
 import React, { useState } from "react"
 import { useRouter } from "next/navigation"
 import { signIn } from "next-auth/react"
-import { Mail, Lock, ArrowRight, ShieldCheck, ArrowLeft, Loader2, KeyRound } from "lucide-react"
+import { Mail, Lock, ArrowRight, ShieldCheck, ArrowLeft, Loader2, KeyRound, Eye, EyeOff } from "lucide-react"
 
 export default function LoginPage() {
   const router = useRouter()
   const [step, setStep] = useState<"login" | "forgot" | "reset">("login")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
   
   // Forgot password inputs
   const [code, setCode] = useState("")
   const [newPassword, setNewPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
+  const [showNewPassword, setShowNewPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   
   // Status states
   const [loading, setLoading] = useState(false)
@@ -253,13 +256,20 @@ export default function LoginPage() {
                 <div className="relative group">
                   <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-[#4F6DF5] transition-colors" />
                   <input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-11 pr-4 py-3.5 bg-gray-50/50 hover:bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#4F6DF5] focus:ring-4 focus:ring-[#4F6DF5]/10 focus:bg-white transition-all shadow-sm"
+                    className="w-full pl-11 pr-12 py-3.5 bg-gray-50/50 hover:bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#4F6DF5] focus:ring-4 focus:ring-[#4F6DF5]/10 focus:bg-white transition-all shadow-sm"
                     placeholder="••••••••••••"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none transition-colors"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
                 </div>
               </div>
             </div>
@@ -379,13 +389,20 @@ export default function LoginPage() {
                 <div className="relative group">
                   <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-[#4F6DF5] transition-colors" />
                   <input
-                    type="password"
+                    type={showNewPassword ? "text" : "password"}
                     required
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    className="w-full pl-11 pr-4 py-3.5 bg-gray-50/50 hover:bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#4F6DF5] focus:ring-4 focus:ring-[#4F6DF5]/10 focus:bg-white transition-all shadow-sm"
+                    className="w-full pl-11 pr-12 py-3.5 bg-gray-50/50 hover:bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#4F6DF5] focus:ring-4 focus:ring-[#4F6DF5]/10 focus:bg-white transition-all shadow-sm"
                     placeholder="••••••••••••"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowNewPassword(!showNewPassword)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none transition-colors"
+                  >
+                    {showNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
                 </div>
               </div>
 
@@ -396,13 +413,20 @@ export default function LoginPage() {
                 <div className="relative group">
                   <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-[#4F6DF5] transition-colors" />
                   <input
-                    type="password"
+                    type={showConfirmPassword ? "text" : "password"}
                     required
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full pl-11 pr-4 py-3.5 bg-gray-50/50 hover:bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#4F6DF5] focus:ring-4 focus:ring-[#4F6DF5]/10 focus:bg-white transition-all shadow-sm"
+                    className="w-full pl-11 pr-12 py-3.5 bg-gray-50/50 hover:bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#4F6DF5] focus:ring-4 focus:ring-[#4F6DF5]/10 focus:bg-white transition-all shadow-sm"
                     placeholder="••••••••••••"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none transition-colors"
+                  >
+                    {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
                 </div>
               </div>
             </div>
