@@ -26,6 +26,17 @@ export async function POST(req: Request) {
       }
     }
 
+    // Check if slug is already taken
+    const existingPost = await prisma.post.findUnique({
+      where: { slug }
+    })
+    if (existingPost) {
+      return NextResponse.json(
+        { error: 'A post with this URL slug already exists. Please choose a different title or slug.' },
+        { status: 400 }
+      )
+    }
+
     const post = await prisma.post.create({
       data: {
         title,

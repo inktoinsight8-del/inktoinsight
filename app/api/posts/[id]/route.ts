@@ -49,6 +49,20 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
       }
     }
 
+    // Check if slug is already taken by another post
+    const existingPost = await prisma.post.findFirst({
+      where: {
+        slug,
+        id: { not: id }
+      }
+    })
+    if (existingPost) {
+      return NextResponse.json(
+        { error: 'A post with this URL slug already exists. Please choose a different title or slug.' },
+        { status: 400 }
+      )
+    }
+
     const post = await prisma.post.update({
       where: { id },
       data: {

@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { LogOut, LayoutDashboard, FileText, Settings, PlusCircle, Folder, Users } from 'lucide-react'
+import { LogOut, LayoutDashboard, FileText, Settings, PlusCircle, Folder, Users, MessageSquare, Mail } from 'lucide-react'
 import { auth, signOut } from '@/auth'
 import { redirect } from 'next/navigation'
 
@@ -42,6 +42,14 @@ export default async function AdminLayout({
             <Link href="/admin/categories" className="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-[#2A2D3A] transition-all text-sm font-semibold text-gray-700 dark:text-gray-300">
               <Folder size={18} className="text-gray-400" />
               Categories
+            </Link>
+            <Link href="/admin/comments" className="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-[#2A2D3A] transition-all text-sm font-semibold text-gray-700 dark:text-gray-300">
+              <MessageSquare size={18} className="text-gray-400" />
+              Comments
+            </Link>
+            <Link href="/admin/newsletter" className="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-[#2A2D3A] transition-all text-sm font-semibold text-gray-700 dark:text-gray-300">
+              <Mail size={18} className="text-gray-400" />
+              Newsletter
             </Link>
             <Link href="/admin/users" className="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-[#2A2D3A] transition-all text-sm font-semibold text-gray-700 dark:text-gray-300">
               <Users size={18} className="text-gray-400" />

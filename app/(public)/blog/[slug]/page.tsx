@@ -6,6 +6,7 @@ import ReadingProgress from "@/components/ReadingProgress"
 import PostActions from "@/components/PostActions"
 import Image from "next/image"
 import ViewTracker from "@/components/ViewTracker"
+import CommentsSection from "@/components/CommentsSection"
 
 export default async function PostDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
@@ -95,6 +96,10 @@ export default async function PostDetailPage({ params }: { params: Promise<{ slu
           </div>
         </div>
       </article>
+
+      <div className="max-w-3xl mx-auto">
+        <CommentsSection postId={post.id} />
+      </div>
 
       <PostActions postId={post.id} slug={post.slug} initialLikes={post.likes} />
     </>
